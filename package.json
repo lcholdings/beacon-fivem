@@ -1,0 +1,39 @@
+{
+  "name": "beacon-fivem",
+  "author": "LCHoldings",
+  "version": "0.1.0-alpha.0",
+  "license": "",
+  "description": "This resource is the primary collector for Beacon. It collects data required and sends it off to the Beacon servers. This resource is completely open source at github.com/lcholdings/beacon-fivem",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "watch": "node scripts/build.js --watch",
+    "format": "pnpm biome format --write",
+    "lint": "pnpm biome lint --write"
+  },
+  "keywords": [
+    "fivem",
+    "beacon"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lcholdings/beacon-fivem.git"
+  },
+  "bugs": "https://github.com/lcholdings/beacon-fivem/issues",
+  "devDependencies": {
+    "@citizenfx/client": "latest",
+    "@citizenfx/server": "latest",
+    "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
+    "@communityox/fx-utils": "^0.0.4",
+    "@types/node": "^22.15.30",
+    "esbuild": "^0.25.5",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@beacon-oss/types": "^0.1.0-alpha.21",
+    "@biomejs/biome": "^1.9.4",
+    "@communityox/ox_lib": "latest",
+    "@nativewrappers/fivem": "latest",
+    "node-fetch": "^3.3.2"
+  }
+}

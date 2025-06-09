@@ -1,0 +1,14 @@
+{
+  "ServerFramework": "qbox",
+  "Debug": {
+    "DebugLogs": true,
+    "Commands": {
+      "PrintCache": true,
+      "ClearCache": true
+    }
+  },
+  "API": {
+    "BaseUrl": "api.beacon5m.com/v1",
+    "UseSecureConnection": false
+  }
+}
