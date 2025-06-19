@@ -36,7 +36,7 @@ async function fetchFXServerInfo(): Promise<{ artifactVersion: string, artifactO
     };
   }
 }
-
+// hur skriker den inte tog ju bort positons wher are my errors
 // Get Player Identifiers Data
 async function getPlayerIdentifiersData(playerId: string): Promise<PlayerIdentifiers> {
   const identifiers: string[] = getPlayerIdentifiers(playerId);
@@ -55,7 +55,7 @@ async function getPlayerIdentifiersData(playerId: string): Promise<PlayerIdentif
     licenses: identifiers
       .filter(id => id.startsWith("license"))
       .map(removePrefix),
-    ipAdresses: [GetPlayerEndpoint(playerId)]
+    ipAddresses: [GetPlayerEndpoint(playerId)]
   };
 }
 
@@ -95,7 +95,7 @@ export async function getInitialServerSocketPlayers(): Promise<SocketPlayer[]> {
     const isStaff = false; // Future thing
 
     // Player Position
-    const [x, y, z] = GetEntityCoords(GetPlayerPed(id), true);
+    //const [x, y, z] = GetEntityCoords(GetPlayerPed(id), true);
 
     // Player Mugshot
     var mugshot = await triggerClientCallback<{ mugshot: string }>('beacon:getMugshot:client', parseInt(id), [id]);
@@ -120,11 +120,10 @@ export async function getInitialServerSocketPlayers(): Promise<SocketPlayer[]> {
       name,
       isStaff,
       isInVehicle,
-      mugshot: "",
-      //mugshot:  mugshot.mugshot,
+      //mugshot: "",
+      mugshot:  mugshot.mugshot,
       characterName: characterData.name,
       job: characterData.job,
-      position: { x, y, z },
       vehicle: vehicle ? {
         model: String(vehicleData.vehicleDisplayName),
         plate: GetVehicleNumberPlateText(vehicle)

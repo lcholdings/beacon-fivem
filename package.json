@@ -23,14 +23,14 @@
   "devDependencies": {
     "@citizenfx/client": "latest",
     "@citizenfx/server": "latest",
-    "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
     "@communityox/fx-utils": "^0.0.4",
+    "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
     "@types/node": "^22.15.30",
     "esbuild": "^0.25.5",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@beacon-oss/types": "^0.1.0-alpha.21",
+    "@beacon-oss/types": "^0.1.0-alpha.25",
     "@biomejs/biome": "^1.9.4",
     "@communityox/ox_lib": "latest",
     "@nativewrappers/fivem": "latest",
