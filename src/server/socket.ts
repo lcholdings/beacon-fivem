@@ -21,7 +21,7 @@ export async function socketConnection() {
       BeaconLog("Authorization check failed, not connecting to WebSocket.", "error");
       return false;
     }
-    const socket = new WebSocket(`${WebSocketURL}/ws/fivem`);
+    const socket = new WebSocket(`${WebSocketURL}/ws/mainstream`);
 
     socket.onopen = () => {
       BeaconLog("Socket connection API has been opened.", "info");

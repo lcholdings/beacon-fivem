@@ -1,14 +1,14 @@
-import { SocketPlayer } from "@beacon-oss/types";
+import { SocketPlayersPositions} from "@beacon-oss/types";
 import { APIURL } from "../utils";
 import { ApiResponse } from '../../types/apiResponse';
 import { BeaconLogDebug } from "@common/logging";
 
-export async function postPlayers(players: SocketPlayer[]): Promise<ApiResponse> {
-  BeaconLogDebug(`postPlayers: Sending ${JSON.stringify({
+export async function postPlayersPositions(players: SocketPlayersPositions): Promise<ApiResponse> {
+  BeaconLogDebug(`postPlayersPositions: Sending ${JSON.stringify({
     players: players
   })}`);
 
-  const postPlayersRequest = await fetch(`${APIURL}/fivem/playersupdate/123`, {
+  const postPlayersPositionsRequest = await fetch(`${APIURL}/fivem/playerpositions/123`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -18,15 +18,15 @@ export async function postPlayers(players: SocketPlayer[]): Promise<ApiResponse>
     })
   })
 
-  BeaconLogDebug(`API "playersupdate" response: ${postPlayersRequest.status} - ${postPlayersRequest.statusText}`);
+  BeaconLogDebug(`API "playerspositions" response: ${postPlayersPositionsRequest.status} - ${postPlayersPositionsRequest.statusText}`);
 
-  const contentType = postPlayersRequest.headers.get('content-type');
+  const contentType = postPlayersPositionsRequest.headers.get('content-type');
   let response: ApiResponse;
 
   if (contentType && contentType.includes('application/json')) {
-    response = await postPlayersRequest.json() as ApiResponse;
+    response = await postPlayersPositionsRequest.json() as ApiResponse;
   } else {
-    const text = await postPlayersRequest.text();
+    const text = await postPlayersPositionsRequest.text();
     response = {
       message: text,
       error: "Non-JSON response"

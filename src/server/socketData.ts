@@ -5,8 +5,9 @@ import { triggerClientCallback } from "@communityox/ox_lib/server";
 import { getPlayerDataSocket } from "./frameworks";
 
 // Types
-import { PlayerIdentifiers, SocketData, SocketPlayer } from "@beacon-oss/types";
+import { PlayerIdentifiers, SocketData, SocketPlayer, SocketPlayersPositions } from "@beacon-oss/types";
 import { PlayerNameJob } from "../types/playerData";
+import { BeaconLogDebug } from "@common/logging";
 
 // Remove prefix from identifiers
 function removePrefix(identifier: string) {
@@ -36,7 +37,6 @@ async function fetchFXServerInfo(): Promise<{ artifactVersion: string, artifactO
     };
   }
 }
-// hur skriker den inte tog ju bort positons wher are my errors
 // Get Player Identifiers Data
 async function getPlayerIdentifiersData(playerId: string): Promise<PlayerIdentifiers> {
   const identifiers: string[] = getPlayerIdentifiers(playerId);
@@ -87,6 +87,7 @@ export async function getInitialServerData(): Promise<SocketData> {
 // Get Initial(all) Server Players
 export async function getInitialServerSocketPlayers(): Promise<SocketPlayer[]> {
   const onlinePlayers = getPlayers();
+  BeaconLogDebug("Online Players: " + onlinePlayers);
   const players = await Promise.all(onlinePlayers.map(async id => {
     // Player Details
     const name = GetPlayerName(id);
@@ -98,10 +99,10 @@ export async function getInitialServerSocketPlayers(): Promise<SocketPlayer[]> {
     //const [x, y, z] = GetEntityCoords(GetPlayerPed(id), true);
 
     // Player Mugshot
-    var mugshot = await triggerClientCallback<{ mugshot: string }>('beacon:getMugshot:client', parseInt(id), [id]);
-    if (!mugshot || !mugshot.mugshot) {
-      mugshot = { mugshot: "" }; // Default to empty string if no mugshot
-    }
+    // var mugshot = await triggerClientCallback<{ mugshot: string }>('beacon:getMugshot:client', parseInt(id), [id]);
+    // if (!mugshot || !mugshot.mugshot) {
+    //   mugshot = { mugshot: "" }; // Default to empty string if no mugshot
+    // }
 
     // Player Vehicle
     const isInVehicle = (GetVehiclePedIsIn(GetPlayerPed(id), false) !== 0);
@@ -120,8 +121,9 @@ export async function getInitialServerSocketPlayers(): Promise<SocketPlayer[]> {
       name,
       isStaff,
       isInVehicle,
-      //mugshot: "",
-      mugshot:  mugshot.mugshot,
+      mugshot: "",
+      //mugshot: mugshot.mugshot,
+      position: { x: 1, y: 1, z: 1 },
       characterName: characterData.name,
       job: characterData.job,
       vehicle: vehicle ? {
@@ -130,5 +132,17 @@ export async function getInitialServerSocketPlayers(): Promise<SocketPlayer[]> {
       } : undefined
     };
   }));
+  BeaconLogDebug("Initial Server Players: " + players,);
   return players;
+}
+
+// Get Initial(all) Server Players Positions
+export async function getInitialServerSocketPlayersPositions(): Promise<SocketPlayersPositions> {
+  const onlinePlayers = getPlayers();
+  const playersPositions: SocketPlayersPositions = {};
+  for (const id of onlinePlayers) {
+    const [x, y, z] = GetEntityCoords(GetPlayerPed(id), true);
+    playersPositions[id] = { x, y, z };
+  }
+  return playersPositions;
 }

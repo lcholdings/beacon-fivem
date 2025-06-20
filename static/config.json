@@ -8,7 +8,7 @@
     }
   },
   "API": {
-    "BaseUrl": "api.beacon5m.com/v1",
+    "BaseUrl": "localhost:3000/v1",
     "UseSecureConnection": false
   }
 }

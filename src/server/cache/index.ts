@@ -1,9 +1,11 @@
 // Types
-import type { ServerSocket, SocketData, SocketPlayer } from '@beacon-oss/types';
+import type { ServerSocket, SocketData, SocketPlayer, SocketPlayersPositions } from '@beacon-oss/types';
 import { BeaconLogDebug } from '../../common/logging';
 
 // Init ServerPlayers Cache
 var serverPlayersCache: SocketPlayer[] = [];
+
+var serverPlayersPositionCache: SocketPlayersPositions = {};
 
 // Init ServerSocket Cache
 var serverDataCache: SocketData = {
@@ -40,7 +42,9 @@ export function getServerDataCache(): SocketData {
   return { ...serverDataCache };
 }
 
-
+export function getServerPlayersPositionCache(): SocketPlayersPositions {
+  return serverPlayersPositionCache;
+}
 //! Set Exports
 export function playerJoinedLogCache(playerData: SocketPlayer): void {
   serverDataCache.totalPlayers += 1;
@@ -68,6 +72,9 @@ export function setServerPlayersCache(players: SocketPlayer[]): void {
   serverDataCache.totalPlayers = players.length;
 }
 
+export function setServerPlayersPositionCache(positions: SocketPlayersPositions): void {
+  serverPlayersPositionCache = positions;
+}
 
 //! Other Exports
 export function clearCache(): void {

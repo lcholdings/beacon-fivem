@@ -9,7 +9,7 @@ const headers = {
 
 export async function checkAuthorization() {
   try {
-    const response = await fetch(`${APIURL}/ws/authcheck`, {
+    const response = await fetch(`${APIURL}/fivem/authcheck`, {
       method: "GET",
       headers: headers
     })
@@ -33,7 +33,7 @@ export async function checkAuthorization() {
 
       BeaconLog(`Please authorize your server at ${connectionUrl}`, "error");
 
-      const connectSocket = new WebSocket(`${WebSocketURL}/ws/connect`, {
+      const connectSocket = new WebSocket(`${WebSocketURL}/ws/awaitconnect`, {
         headers: headers
       });
 
