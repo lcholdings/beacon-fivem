@@ -7,6 +7,7 @@ import { socketConnection } from './socket';
 import { postPlayers } from './sync/postPlayers';
 import { postPlayersPositions } from './sync/postPlayerPositions';
 import { BeaconLog, BeaconLogDebug } from '@common/logging';
+import { postServerInformation } from './sync/postServerInformation';
 //! Version Check
 versionCheck("lcholdings/beacon-fivem")
 
@@ -20,20 +21,23 @@ socketConnection()
 export async function fetchServerSocketData() {
   try {
     const serverData = await getInitialServerData();
-    console.log("Server Data: ", serverData)
     const serverPlayers = await getInitialServerSocketPlayers();
-    console.log("Server Players: ", serverPlayers)
     setServerDataCache(serverData);
     setServerPlayersCache(serverPlayers);
 
     try {
       const doPostPlayers = await postPlayers(serverPlayers)
+      const doServerInformation = await postServerInformation(serverData)
 
       if (doPostPlayers.error) {
         BeaconLog("An unexpected error has occured while fetching all players. Please contact support if the problem persists. More information can be found in the debug logs.", "error")
       }
+      if (doServerInformation.error) {
+        BeaconLog("An unexpected error has occured while fetching server information. Please contact support if the problem persists. More information can be found in the debug logs.", "error")
+      }
 
       BeaconLogDebug(doPostPlayers.error + ": " + doPostPlayers.message)
+      BeaconLogDebug(doServerInformation.error + ": " + doServerInformation.message)
     } catch (error) {
       BeaconLog("An unexpected error has occured. Please contact support if the problem persists.", "error")
       BeaconLogDebug(error)
@@ -74,7 +78,7 @@ setInterval(() => {
 setTimeout(() => {
   setInterval(() => {
     fetchServerSocketPlayerPositons()
-  }, 1000);
+  }, 100);
 }, 1000);
 
 //! Commands

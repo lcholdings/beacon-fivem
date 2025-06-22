@@ -87,7 +87,6 @@ export async function getInitialServerData(): Promise<SocketData> {
 // Get Initial(all) Server Players
 export async function getInitialServerSocketPlayers(): Promise<SocketPlayer[]> {
   const onlinePlayers = getPlayers();
-  BeaconLogDebug("Online Players: " + onlinePlayers);
   const players = await Promise.all(onlinePlayers.map(async id => {
     // Player Details
     const name = GetPlayerName(id);
@@ -109,12 +108,11 @@ export async function getInitialServerSocketPlayers(): Promise<SocketPlayer[]> {
     var vehicle, vehicleData = null;
     if (isInVehicle) {
       vehicle = isInVehicle ? GetVehiclePedIsIn(GetPlayerPed(id), false) : null;
-      vehicleData = await triggerClientCallback<{ vehicleDisplayName: string }>('beacon:getVehicleDisplayName:client', parseInt(id), [vehicle])
+      vehicleData = await triggerClientCallback<{ vehicleDisplayName: string }>('beacon:client:getVehicleDisplayName', parseInt(id), [vehicle])
       if (!vehicleData) {
         vehicleData = { vehicleDisplayName: "Unknown Vehicle" };
       }
     }
-
     return {
       id,
       identifiers,
@@ -123,7 +121,6 @@ export async function getInitialServerSocketPlayers(): Promise<SocketPlayer[]> {
       isInVehicle,
       mugshot: "",
       //mugshot: mugshot.mugshot,
-      position: { x: 1, y: 1, z: 1 },
       characterName: characterData.name,
       job: characterData.job,
       vehicle: vehicle ? {
@@ -132,7 +129,6 @@ export async function getInitialServerSocketPlayers(): Promise<SocketPlayer[]> {
       } : undefined
     };
   }));
-  BeaconLogDebug("Initial Server Players: " + players,);
   return players;
 }
 

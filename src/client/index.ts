@@ -1,7 +1,7 @@
 import { onServerCallback } from '@communityox/ox_lib/client';
 
 // Get Vehicle Display Name
-onServerCallback('beacon:getVehicleDisplayName:client', (args: [string]) => {
+onServerCallback('beacon:client:getVehicleDisplayName', (args: [string]) => {
   const vehicleDisplayName: string = GetDisplayNameFromVehicleModel(args[0]);
   return {
     vehicleDisplayName
