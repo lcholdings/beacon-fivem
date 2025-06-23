@@ -15,10 +15,8 @@ async function processSocketMessage(data: string) {
 
 export async function socketConnection() {
   try {
-    if (!getIsAuthenticated()) {
-      BeaconLog("Authorization check failed, not connecting to WebSocket.", "error");
-      return false;
-    }
+    if (!getIsAuthenticated()) return false;
+
     const socket = new WebSocket(`${WebSocketURL}/ws/mainstream`);
 
     socket.onopen = () => {

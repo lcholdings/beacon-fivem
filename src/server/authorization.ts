@@ -23,10 +23,10 @@ export async function checkAuthorization() {
     }
 
     if (response.status === 401) {
-      const responseBody = await response.json() as { ip: string, error: string };
+      const responseBody = await response.json() as { ipAddress: string, error: string };
 
       const connectionCode = Buffer.from(JSON.stringify({
-        ipAddress: responseBody.ip,
+        ipAddress: responseBody.ipAddress,
         clientName: GetConvar("sv_projectName", "Unknown Client"),
       })).toString('base64');
 
