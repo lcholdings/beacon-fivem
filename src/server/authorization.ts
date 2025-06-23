@@ -3,8 +3,8 @@ import { ResourceMetadata, } from "@common/resource";
 import { APIURL, WebSocketURL } from "./utils";
 
 const headers = {
-  ['Content-Type']: 'application/json',
-  ['User-Agent']: `beacon-fivem/${ResourceMetadata.version} (${ResourceMetadata.context})`,
+  'Content-Type': 'application/json',
+  'User-Agent': `beacon-fivem/${ResourceMetadata.version} (${ResourceMetadata.context})`,
 };
 
 export async function checkAuthorization() {
@@ -29,7 +29,7 @@ export async function checkAuthorization() {
         clientName: GetConvar("sv_projectName", "Unknown Client"),
       })).toString('base64');
 
-      const connectionUrl = `https://dash.beacon5m.com/connect?code=${connectionCode}`;
+      const connectionUrl = `https://beta.beacon5m.com/connect?code=${connectionCode}`;
 
       BeaconLog(`Please authorize your server at ${connectionUrl}`, "error");
 
@@ -67,10 +67,10 @@ export async function checkAuthorization() {
           resolve(false);
         };
       });
-    } else {
-      BeaconLog(`Couldn't connect to the Beacon API. Check https://status.beacon5m.com for more information or open a ticket on our discord server.`, "error")
-      return false
     }
+
+    BeaconLog(`Couldn't connect to the Beacon API. Check https://status.beacon5m.com for more information or open a ticket on our discord server.`, "error")
+    return false
   } catch {
     BeaconLog("An error occurred while checking authorization. Please ensure the Beacon API is running and accessible.", "error");
     return false;

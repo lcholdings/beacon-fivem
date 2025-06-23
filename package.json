@@ -25,7 +25,7 @@
     "@citizenfx/server": "latest",
     "@communityox/fx-utils": "^0.0.4",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
-    "@types/node": "^22.15.30",
+    "@types/node": "^22.15.32",
     "esbuild": "^0.25.5",
     "typescript": "^5.8.3"
   },

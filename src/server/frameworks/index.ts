@@ -1,11 +1,11 @@
 import Config from '@common/config';
 import * as QBox from './qbox/functions';
 import * as Standalone from './standalone/functions';
-import { PlayerJob, PlayerNameJob } from '../../types/playerData';
+import type { PlayerJob, PlayerNameJob } from '../../types/playerData';
 
-export var getPlayerDataSocket: (playerId: string) => Promise<PlayerNameJob>;
-export var getPlayerJob: (playerId: string) => Promise<PlayerJob>;
-export var getPlayerName: (playerId: string) => Promise<string>;
+export let getPlayerDataSocket: (playerId: string) => Promise<PlayerNameJob>;
+export let getPlayerJob: (playerId: string) => Promise<PlayerJob>;
+export let getPlayerName: (playerId: string) => Promise<string>;
 
 
 if (Config.ServerFramework === 'qbox') {

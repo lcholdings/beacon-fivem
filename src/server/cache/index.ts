@@ -3,12 +3,11 @@ import type { ServerSocket, SocketData, SocketPlayer, SocketPlayersPositions } f
 import { BeaconLogDebug } from '../../common/logging';
 
 // Init ServerPlayers Cache
-var serverPlayersCache: SocketPlayer[] = [];
-
-var serverPlayersPositionCache: SocketPlayersPositions = {};
+let serverPlayersCache: SocketPlayer[] = [];
+let serverPlayersPositionCache: SocketPlayersPositions = {};
 
 // Init ServerSocket Cache
-var serverDataCache: SocketData = {
+let serverDataCache: SocketData = {
   totalPlayers: 0,
   maxPlayers: 0,
   serverDescription: "",
@@ -25,6 +24,12 @@ var serverDataCache: SocketData = {
     pureLevel: "0"
   },
 }
+
+// Is Authenticated
+let isAuthenticated = false;
+
+// Error Timeout Cache to avoid flooding the logs
+let errorTimeout: Date | null = null
 
 //! Get Exports
 export function getServerSocketCache(): ServerSocket {
@@ -45,6 +50,14 @@ export function getServerDataCache(): SocketData {
 export function getServerPlayersPositionCache(): SocketPlayersPositions {
   return serverPlayersPositionCache;
 }
+
+export function getIsAuthenticated(): boolean {
+  return isAuthenticated;
+}
+export function getErrorTimeout(): Date | null {
+  return errorTimeout;
+}
+
 //! Set Exports
 export function playerJoinedLogCache(playerData: SocketPlayer): void {
   serverDataCache.totalPlayers += 1;
@@ -76,9 +89,19 @@ export function setServerPlayersPositionCache(positions: SocketPlayersPositions)
   serverPlayersPositionCache = positions;
 }
 
+export function setIsAuthenticated(authenticated: boolean): void {
+  isAuthenticated = authenticated;
+}
+
+export function setErrorTimeout(): void {
+  errorTimeout = new Date();
+}
+
 //! Other Exports
 export function clearCache(): void {
   serverPlayersCache = [];
+  serverPlayersPositionCache = {};
+  errorTimeout = null;
   serverDataCache = {
     totalPlayers: 0,
     maxPlayers: 0,
@@ -99,6 +122,6 @@ export function clearCache(): void {
 }
 
 export function printCache(): void {
-  BeaconLogDebug("Server Cache Data: \n " + JSON.stringify(serverDataCache, null, 2));
-  BeaconLogDebug("Server Players Cache: \n " + JSON.stringify(serverPlayersCache, null, 2));
+  BeaconLogDebug(`Server Cache Data: \n ${JSON.stringify(serverDataCache, null, 2)}`);
+  BeaconLogDebug(`Server Players Cache: \n ${JSON.stringify(serverPlayersCache, null, 2)}`);
 }

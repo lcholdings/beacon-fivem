@@ -1,6 +1,6 @@
-import { SocketPlayer } from '@beacon-oss/types';
-import { Player } from '../../../types/frameworks/qbox';
-import { PlayerJob } from '../../../types/playerData';
+import type { SocketPlayer } from '@beacon-oss/types';
+import type { Player } from '../../../types/frameworks/qbox';
+import type { PlayerJob } from '../../../types/playerData';
 
 type QboxPlayerDataSocket = {
   job: SocketPlayer["job"];
@@ -17,7 +17,7 @@ export async function getQboxPlayerDataSocket(playerId: string): Promise<QboxPla
       name: player.PlayerData.job.label,
       grade: player.PlayerData.job.grade.name
     },
-    name: player.PlayerData.charinfo.firstname + " " + player.PlayerData.charinfo.lastname
+    name: `${player.PlayerData.charinfo.firstname} ${player.PlayerData.charinfo.lastname}`
   };
 }
 

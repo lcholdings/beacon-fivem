@@ -1,6 +1,6 @@
-import { SocketPlayersPositions} from "@beacon-oss/types";
+import type { SocketPlayersPositions } from "@beacon-oss/types";
 import { APIURL } from "../utils";
-import { ApiResponse } from '../../types/apiResponse';
+import type { ApiResponse } from '../../types/apiResponse';
 import { BeaconLogDebug } from "@common/logging";
 
 export async function postPlayersPositions(players: SocketPlayersPositions): Promise<ApiResponse> {
@@ -23,7 +23,7 @@ export async function postPlayersPositions(players: SocketPlayersPositions): Pro
   const contentType = postPlayersPositionsRequest.headers.get('content-type');
   let response: ApiResponse;
 
-  if (contentType && contentType.includes('application/json')) {
+  if (contentType?.includes('application/json')) {
     response = await postPlayersPositionsRequest.json() as ApiResponse;
   } else {
     const text = await postPlayersPositionsRequest.text();

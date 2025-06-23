@@ -1,4 +1,4 @@
-import { SocketPlayer } from "@beacon-oss/types";
+import type { SocketPlayer } from "@beacon-oss/types";
 
 export type PlayerJob = SocketPlayer['job'];
 

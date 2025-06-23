@@ -5,8 +5,8 @@ import { triggerClientCallback } from "@communityox/ox_lib/server";
 import { getPlayerDataSocket } from "./frameworks";
 
 // Types
-import { PlayerIdentifiers, SocketData, SocketPlayer, SocketPlayersPositions } from "@beacon-oss/types";
-import { PlayerNameJob } from "../types/playerData";
+import type { PlayerIdentifiers, SocketData, SocketPlayer, SocketPlayersPositions } from "@beacon-oss/types";
+import type { PlayerNameJob } from "../types/playerData";
 import { BeaconLogDebug } from "@common/logging";
 
 // Remove prefix from identifiers
@@ -23,7 +23,7 @@ async function fetchFXServerInfo(): Promise<{ artifactVersion: string, artifactO
 
     // Extract artifact version and OS from server string then return
     const artifactMatch = fxsVersion.match(/v([\d.]+)/);
-    let artifactVersion = artifactMatch ? artifactMatch[1] : "Unknown";
+    const artifactVersion = artifactMatch ? artifactMatch[1] : "Unknown";
 
     return {
       artifactVersion: artifactVersion.slice("1.0.0.".length),
@@ -43,7 +43,7 @@ async function getPlayerIdentifiersData(playerId: string): Promise<PlayerIdentif
 
   // Format the identifiers
   const getId = (prefix: string) =>
-    removePrefix(identifiers.find(id => id.startsWith(prefix + ":")) || "");
+    removePrefix(identifiers.find(id => id.startsWith(`${prefix}:`)) || "");
 
   return {
     primaryLicense: getId("license"),
@@ -105,10 +105,11 @@ export async function getInitialServerSocketPlayers(): Promise<SocketPlayer[]> {
 
     // Player Vehicle
     const isInVehicle = (GetVehiclePedIsIn(GetPlayerPed(id), false) !== 0);
-    var vehicle, vehicleData = null;
+    let vehicle: number | null = null;
+    let vehicleData = null;
     if (isInVehicle) {
       vehicle = isInVehicle ? GetVehiclePedIsIn(GetPlayerPed(id), false) : null;
-      vehicleData = await triggerClientCallback<{ vehicleDisplayName: string }>('beacon:client:getVehicleDisplayName', parseInt(id), [vehicle])
+      vehicleData = await triggerClientCallback<{ vehicleDisplayName: string }>('beacon:client:getVehicleDisplayName', Number.parseInt(id), [vehicle])
       if (!vehicleData) {
         vehicleData = { vehicleDisplayName: "Unknown Vehicle" };
       }

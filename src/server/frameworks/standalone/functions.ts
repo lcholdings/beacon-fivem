@@ -1,5 +1,5 @@
-import { SocketPlayer } from '@beacon-oss/types';
-import { PlayerJob } from '../../../types/playerData';
+import type { SocketPlayer } from '@beacon-oss/types';
+import type { PlayerJob } from '../../../types/playerData';
 
 //! Return empty functions for standalone mode since they are optional
 

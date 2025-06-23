@@ -1,6 +1,6 @@
-import { SocketData} from "@beacon-oss/types";
+import type { SocketData} from "@beacon-oss/types";
 import { APIURL } from "../utils";
-import { ApiResponse } from '../../types/apiResponse';
+import type { ApiResponse } from '../../types/apiResponse';
 import { BeaconLogDebug } from "@common/logging";
 
 export async function postServerInformation( socketdata: SocketData): Promise<ApiResponse> {
@@ -23,7 +23,7 @@ export async function postServerInformation( socketdata: SocketData): Promise<Ap
   const contentType = postServerInformationRequest.headers.get('content-type');
   let response: ApiResponse;
 
-  if (contentType && contentType.includes('application/json')) {
+  if (contentType?.includes('application/json')) {
     response = await postServerInformationRequest.json() as ApiResponse;
   } else {
     const text = await postServerInformationRequest.text();

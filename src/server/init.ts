@@ -19,7 +19,7 @@ export function InitLog() {
   // Log the ASCII art
   AsciiArt.split('\n').forEach(row => {
     if (row.trim() !== '') {
-      console.log("^4" + row);
+      console.log(`^4${row}`);
     }
   });
 
@@ -27,7 +27,7 @@ export function InitLog() {
   console.log('');
 
   // Log Version
-  BeaconLog("You are running version ^4" + ResourceMetadata.version, "info");
+  BeaconLog(`You are running version ^4${ResourceMetadata.version}`, "info");
   if (ResourceMetadata.version.includes("-")) {
     BeaconLog("This is a development version, not recommended for production use.", "warn");
   }
@@ -46,7 +46,7 @@ export function InitLog() {
     allowedFrameworks.includes(Config.ServerFramework as ServerFrameworks)
   ) {
     BeaconLog(`Server Framework: ^4${Config.ServerFramework.toUpperCase()}`, "info");
-    if (Config.ServerFramework == "standalone") {
+    if (Config.ServerFramework === "standalone") {
       BeaconLog("For help getting your framework setup, please open a ticket at https://discord.gg/hze4CTJW5z!", "info");
     }
   } else {

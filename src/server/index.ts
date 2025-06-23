@@ -1,6 +1,6 @@
 import { versionCheck } from '@communityox/ox_lib/server';
 import { getInitialServerData, getInitialServerSocketPlayers, getInitialServerSocketPlayersPositions } from './socketData';
-import { setServerDataCache, setServerPlayersCache, setServerPlayersPositionCache } from './cache';
+import { getErrorTimeout, getIsAuthenticated, setErrorTimeout, setIsAuthenticated, setServerDataCache, setServerPlayersCache, setServerPlayersPositionCache } from './cache';
 import { InitLog } from './init';
 import { registerCommands } from './commands';
 import { socketConnection } from './socket';
@@ -8,17 +8,27 @@ import { postPlayers } from './sync/postPlayers';
 import { postPlayersPositions } from './sync/postPlayerPositions';
 import { BeaconLog, BeaconLogDebug } from '@common/logging';
 import { postServerInformation } from './sync/postServerInformation';
+import { checkAuthorization } from './authorization';
+
 //! Version Check
 versionCheck("lcholdings/beacon-fivem")
 
 //! Initial Log
 InitLog()
 
-//! socket connection
-socketConnection()
+//! Check Authorization
+const checkAuth = await checkAuthorization()
+if (checkAuth) setIsAuthenticated(true);
+
+
+//! Socket Connection
+await socketConnection()
 
 //! Server Socket
 export async function fetchServerSocketData() {
+  if (!getIsAuthenticated()) return
+  if (getErrorTimeout() && new Date().getTime() - getErrorTimeout().getTime() < 1000 * 60 * 5) return
+
   try {
     const serverData = await getInitialServerData();
     const serverPlayers = await getInitialServerSocketPlayers();
@@ -36,19 +46,24 @@ export async function fetchServerSocketData() {
         BeaconLog("An unexpected error has occured while fetching server information. Please contact support if the problem persists. More information can be found in the debug logs.", "error")
       }
 
-      BeaconLogDebug(doPostPlayers.error + ": " + doPostPlayers.message)
-      BeaconLogDebug(doServerInformation.error + ": " + doServerInformation.message)
+      BeaconLogDebug(`${doPostPlayers.error}: ${doPostPlayers.message}`)
+      BeaconLogDebug(`${doServerInformation.error}: ${doServerInformation.message}`)
     } catch (error) {
+      setErrorTimeout()
       BeaconLog("An unexpected error has occured. Please contact support if the problem persists.", "error")
       BeaconLogDebug(error)
     }
 
     return true;
   } catch (error) {
+    setErrorTimeout()
     throw new Error('Error fetching server socket data:', error);
   }
 }
+
 export async function fetchServerSocketPlayerPositons() {
+  if (!getIsAuthenticated()) return
+  if (getErrorTimeout() && new Date().getTime() - getErrorTimeout().getTime() < 1000 * 60 * 5) return
   try {
     const playerpositons = await getInitialServerSocketPlayersPositions();
 
@@ -59,24 +74,28 @@ export async function fetchServerSocketPlayerPositons() {
       if (doPostPlayersPositions.error) {
         BeaconLog("An unexpected error has occured while fetching all players positions. Please contact support if the problem persists. More information can be found in the debug logs.", "error")
       }
-      BeaconLogDebug(doPostPlayersPositions.error + ": " + doPostPlayersPositions.message)
+      BeaconLogDebug(`${doPostPlayersPositions.error}: ${doPostPlayersPositions.message}`)
     } catch (error) {
+      setErrorTimeout()
       BeaconLog("An unexpected error has occured. Please contact support if the problem persists.", "error")
       BeaconLogDebug(error)
 
     }
     return true;
   } catch (error) {
+    setErrorTimeout()
     throw new Error('Error fetching server socket player positions:', error);
   }
 }
 
 // ! Timeout to allow callbacks to be registered
 setInterval(() => {
+  if (!getIsAuthenticated()) return
   fetchServerSocketData()
 }, 1000);
 setTimeout(() => {
   setInterval(() => {
+    if (!getIsAuthenticated()) return
     fetchServerSocketPlayerPositons()
   }, 100);
 }, 1000);
