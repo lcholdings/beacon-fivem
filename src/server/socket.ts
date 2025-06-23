@@ -1,7 +1,7 @@
 
 import { BeaconLog, BeaconLogDebug } from "@common/logging";
-import { checkAuthorization } from "./authorization";
 import { WebSocketURL } from "./utils";
+import { getIsAuthenticated } from "./cache";
 
 async function processSocketMessage(data: string) {
   try {
@@ -15,7 +15,7 @@ async function processSocketMessage(data: string) {
 
 export async function socketConnection() {
   try {
-    if (!authcheck) {
+    if (!getIsAuthenticated()) {
       BeaconLog("Authorization check failed, not connecting to WebSocket.", "error");
       return false;
     }
