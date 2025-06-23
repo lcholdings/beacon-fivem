@@ -3,3 +3,5 @@ node_modules
 /fxmanifest.lua
 /.yarn.installed
 /bun.lock
+config.json
+package-lock.json
