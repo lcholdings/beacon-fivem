@@ -3,7 +3,7 @@
   "author": "LCHoldings",
   "version": "0.1.0-alpha.0",
   "license": "",
-  "description": "This resource is the primary collector for Beacon. It collects data required and sends it off to the Beacon servers. This resource is completely open source at github.com/lcholdings/beacon-fivem",
+  "description": "This resource is the primary collector for Beacon. It collects data required and sends it off to the Beacon servers. This resource is completely open source at https://github.com/lcholdings/beacon-fivem",
   "type": "module",
   "scripts": {
     "build": "node scripts/build.js",
@@ -35,5 +35,8 @@
     "@communityox/ox_lib": "latest",
     "@nativewrappers/fivem": "latest",
     "node-fetch": "^3.3.2"
-  }
+  },
+  "trustedDependencies": [
+    "@biomejs/biome"
+  ]
 }

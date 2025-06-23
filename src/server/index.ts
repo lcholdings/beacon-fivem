@@ -17,12 +17,10 @@ versionCheck("lcholdings/beacon-fivem")
 InitLog()
 
 //! Check Authorization
-const checkAuth = await checkAuthorization()
-if (checkAuth) setIsAuthenticated(true);
-
+checkAuthorization()
 
 //! Socket Connection
-await socketConnection()
+socketConnection()
 
 //! Server Socket
 export async function fetchServerSocketData() {

@@ -1,6 +1,7 @@
 import { BeaconLog, BeaconLogDebug } from "@common/logging";
 import { ResourceMetadata, } from "@common/resource";
 import { APIURL, WebSocketURL } from "./utils";
+import { setIsAuthenticated } from "./cache";
 
 const headers = {
   'Content-Type': 'application/json',
@@ -46,6 +47,7 @@ export async function checkAuthorization() {
           BeaconLogDebug(`Authorization confirmation message received: ${event.data}`);
           if (event.data === "Authorized") {
             BeaconLog("Server has been successfully authorized.", "info");
+            setIsAuthenticated(true);
             resolve(true);
           }
           else if (event.data === "unauthorized") {
