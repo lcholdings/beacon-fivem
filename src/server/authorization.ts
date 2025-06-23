@@ -17,7 +17,7 @@ export async function checkAuthorization() {
 
     BeaconLogDebug(`Authorization check response: ${response.status} ${response.statusText}`);
 
-    if (response.status === 426) {
+    if (response.status === 200) {
       BeaconLogDebug("Connection is already authorized, no further action needed.");
       return true
     }
