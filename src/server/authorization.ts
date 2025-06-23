@@ -19,6 +19,7 @@ export async function checkAuthorization() {
 
     if (response.status === 200) {
       BeaconLogDebug("Connection is already authorized, no further action needed.");
+      setIsAuthenticated(true);
       return true
     }
 
