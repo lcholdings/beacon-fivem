@@ -20,28 +20,28 @@ export async function socketConnection() {
     if (!getIsAuthenticated()) return false;
 
     socket = new WebSocket(`${WebSocketURL}/ws/mainstream`);
+
+    socket.onopen = () => {
+      BeaconLog("Socket connection API has been opened.", "info");
+    };
+
+    socket.onerror = (error) => {
+      BeaconLog(`WebSocket connection failed: ${JSON.stringify(error.message)}`, "error");
+    };
+
+    socket.onclose = (event) => {
+      if (event.wasClean) {
+        BeaconLogDebug("WebSocket connection closed cleanly.");
+      } else {
+        BeaconLog(`WebSocket connection closed unexpectedly: ${event.code} ${event.reason}`, "error");
+      }
+    };
+
+    socket.onmessage = (event) => {
+      processSocketMessage(event.data);
+    };
   } catch (error) {
     console.error("Authorization check failed:", error);
     return false
   }
 }
-
-socket.onopen = () => {
-  BeaconLog("Socket connection API has been opened.", "info");
-};
-
-socket.onerror = (error) => {
-  BeaconLog(`WebSocket connection failed: ${JSON.stringify(error.message)}`, "error");
-};
-
-socket.onclose = (event) => {
-  if (event.wasClean) {
-    BeaconLogDebug("WebSocket connection closed cleanly.");
-  } else {
-    BeaconLog(`WebSocket connection closed unexpectedly: ${event.code} ${event.reason}`, "error");
-  }
-};
-
-socket.onmessage = (event) => {
-  processSocketMessage(event.data);
-};
