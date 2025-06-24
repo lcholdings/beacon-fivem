@@ -8,7 +8,7 @@ export async function postServerInformation( socketdata: SocketData): Promise<Ap
     socketdata
   })}`);
 
-  const postServerInformationRequest = await fetch(`${APIURL}/fivem/serverinformation/false`, {
+  const postServerInformationRequest = await fetch(`${APIURL}/fivem/serverinformation`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
