@@ -8,7 +8,7 @@ export async function postPlayers(players: SocketPlayer[]): Promise<ApiResponse>
     players: players
   })}`);
 
-  const postPlayersRequest = await fetch(`${APIURL}/fivem/playersupdate/123`, {
+  const postPlayersRequest = await fetch(`${APIURL}/fivem/playersupdate`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

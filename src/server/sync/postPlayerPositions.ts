@@ -8,7 +8,7 @@ export async function postPlayersPositions(players: SocketPlayersPositions): Pro
     players: players
   })}`);
 
-  const postPlayersPositionsRequest = await fetch(`${APIURL}/fivem/playerpositions/123`, {
+  const postPlayersPositionsRequest = await fetch(`${APIURL}/fivem/playerpositions`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
