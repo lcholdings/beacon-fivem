@@ -1,6 +1,6 @@
 import { versionCheck } from '@communityox/ox_lib/server';
 import { getInitialServerData, getInitialServerSocketPlayers, getInitialServerSocketPlayersPositions } from './socketData';
-import { getErrorTimeout, getIsAuthenticated, setErrorTimeout, setIsAuthenticated, setServerDataCache, setServerPlayersCache, setServerPlayersPositionCache } from './cache';
+import { getErrorTimeout, getIsAuthenticated, setErrorTimeout, setServerDataCache, setServerPlayersCache, setServerPlayersPositionCache } from './cache';
 import { InitLog } from './init';
 import { registerCommands } from './commands';
 import { socketConnection } from './socket';
@@ -16,11 +16,17 @@ versionCheck("lcholdings/beacon-fivem")
 //! Initial Log
 InitLog()
 
-//! Check Authorization
-checkAuthorization()
+async function authorizationAwait() {
+  //! Check Authorization
+  const authorize = await checkAuthorization();
 
-//! Socket Connection
-socketConnection()
+  if (authorize) {
+    //! Socket Connection
+    socketConnection();
+  }
+}
+
+authorizationAwait()
 
 //! Server Socket
 export async function fetchServerSocketData() {
