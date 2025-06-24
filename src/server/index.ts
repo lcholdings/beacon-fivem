@@ -75,15 +75,14 @@ export async function fetchServerSocketPlayerPositons() {
 
     try {
       const doPostPlayersPositions = await postPlayersPositions(playerpositons)
-      if (doPostPlayersPositions.error) {
+
+      if (!doPostPlayersPositions) {
         BeaconLog("An unexpected error has occured while fetching all players positions. Please contact support if the problem persists. More information can be found in the debug logs.", "error")
       }
-      BeaconLogDebug(`${doPostPlayersPositions.error}: ${doPostPlayersPositions.message}`)
     } catch (error) {
       setErrorTimeout()
       BeaconLog("An unexpected error has occured. Please contact support if the problem persists.", "error")
       BeaconLogDebug(error)
-
     }
     return true;
   } catch (error) {
@@ -93,16 +92,12 @@ export async function fetchServerSocketPlayerPositons() {
 }
 
 // ! Timeout to allow callbacks to be registered
+// ? Temporary
 setInterval(() => {
   if (!getIsAuthenticated()) return
+  fetchServerSocketPlayerPositons()
   fetchServerSocketData()
-}, 1000);
-setTimeout(() => {
-  setInterval(() => {
-    if (!getIsAuthenticated()) return
-    fetchServerSocketPlayerPositons()
-  }, 100);
-}, 1000);
+}, 5000);
 
 //! Commands
 registerCommands()

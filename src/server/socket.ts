@@ -45,3 +45,32 @@ export async function socketConnection() {
     return false
   }
 }
+
+export async function sendSocketMessage(message: {
+  event: string;
+  data: string;
+}) {
+  if (!getIsAuthenticated()) {
+    BeaconLog("Server is not authenticated. Cannot send message.", "error");
+    return false;
+  }
+
+  if (!socket || socket.readyState !== WebSocket.OPEN) {
+    BeaconLog("WebSocket is not open. Cannot send message.", "error");
+    return false;
+  }
+
+  if (!message || !message.event || !message.data) {
+    BeaconLog("Invalid message format. 'event' and 'data' are required.", "error");
+    return false;
+  }
+
+  try {
+    socket.send(JSON.stringify(message));
+    BeaconLogDebug(`WebSocket message sent: ${JSON.stringify(message)}`);
+    return true
+  } catch (error) {
+    BeaconLog(`Failed to send WebSocket message: ${error.message}`, "error");
+    return false;
+  }
+}
