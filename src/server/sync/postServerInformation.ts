@@ -1,44 +1,16 @@
-import type { SocketData} from "@beacon-oss/types";
-import { APIURL } from "../utils";
-import type { ApiResponse } from '../../types/apiResponse';
+import type { SocketData } from "@beacon-oss/types";
 import { BeaconLogDebug } from "@common/logging";
+import { sendSocketMessage } from "../socket";
 
-export async function postServerInformation( socketdata: SocketData): Promise<ApiResponse> {
-  BeaconLogDebug(`postServerInformation: Sending ${JSON.stringify({
-    socketdata
-  })}`);
+export async function postServerInformation(socketData: SocketData): Promise<boolean> {
+  BeaconLogDebug(`postServerInformation: Sending ${JSON.stringify(socketData)}`);
 
-  const postServerInformationRequest = await fetch(`${APIURL}/fivem/serverinformation`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      socketdata
-    })
-  })
+  const sendPlayersMessage = await sendSocketMessage({
+    event: "server-information-update",
+    data: socketData
+  });
 
-  BeaconLogDebug(`API "Server Information" response: ${postServerInformationRequest.status} - ${postServerInformationRequest.statusText}`);
+  BeaconLogDebug(`WebSocket "postServerInformation": ${sendPlayersMessage}`);
 
-  const contentType = postServerInformationRequest.headers.get('content-type');
-  let response: ApiResponse;
-
-  if (contentType?.includes('application/json')) {
-    response = await postServerInformationRequest.json() as ApiResponse;
-  } else {
-    const text = await postServerInformationRequest.text();
-    response = {
-      message: text,
-      error: "Non-JSON response"
-    };
-  }
-
-  if (!response.message) {
-    return {
-      message: "An unexpected error has occured. Please contact support if the problem persists.",
-      error: "Internal Server Error"
-    }
-  }
-
-  return response;
+  return sendPlayersMessage;
 }

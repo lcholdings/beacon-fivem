@@ -3,15 +3,11 @@ import { BeaconLogDebug } from "@common/logging";
 import { sendSocketMessage } from "../socket";
 
 export async function postPlayersPositions(players: SocketPlayersPositions): Promise<boolean> {
-  BeaconLogDebug(`postPlayersPositions: Sending ${JSON.stringify({
-    players: players
-  })}`);
+  BeaconLogDebug(`postPlayersPositions: Sending ${JSON.stringify(players)}`);
 
   const sendPlayerPositions = await sendSocketMessage({
-    event: "PlayerPositionsUpdate",
-    data: JSON.stringify({
-      players: players
-    })
+    event: "player-positions-update",
+    data: players
   });
 
   BeaconLogDebug(`API "playerspositions" response: ${sendPlayerPositions}`);

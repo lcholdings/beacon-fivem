@@ -2,6 +2,7 @@
 import { BeaconLog, BeaconLogDebug } from "@common/logging";
 import { WebSocketURL } from "./utils";
 import { getIsAuthenticated } from "./cache";
+import type { SocketData, SocketPlayer, SocketPlayersPositions } from "@beacon-oss/types";
 
 let socket: WebSocket;
 
@@ -46,10 +47,12 @@ export async function socketConnection() {
   }
 }
 
-export async function sendSocketMessage(message: {
-  event: string;
-  data: string;
-}) {
+type SocketMessage =
+  | { event: "player-positions-update"; data: SocketPlayersPositions }
+  | { event: "players-update"; data: SocketPlayer[] }
+  | { event: "server-information-update"; data: SocketData };
+
+export async function sendSocketMessage(message: SocketMessage) {
   if (!getIsAuthenticated()) {
     BeaconLog("Server is not authenticated. Cannot send message.", "error");
     return false;
@@ -68,7 +71,7 @@ export async function sendSocketMessage(message: {
   try {
     socket.send(JSON.stringify(message));
     BeaconLogDebug(`WebSocket message sent: ${JSON.stringify(message)}`);
-    return true
+    return true;
   } catch (error) {
     BeaconLog(`Failed to send WebSocket message: ${error.message}`, "error");
     return false;

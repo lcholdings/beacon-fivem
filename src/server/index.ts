@@ -43,15 +43,14 @@ export async function fetchServerSocketData() {
       const doPostPlayers = await postPlayers(serverPlayers)
       const doServerInformation = await postServerInformation(serverData)
 
-      if (doPostPlayers.error) {
+      if (!doPostPlayers) {
         BeaconLog("An unexpected error has occured while fetching all players. Please contact support if the problem persists. More information can be found in the debug logs.", "error")
+        throw new Error("Error fetching all players")
       }
-      if (doServerInformation.error) {
+      if (!doServerInformation) {
         BeaconLog("An unexpected error has occured while fetching server information. Please contact support if the problem persists. More information can be found in the debug logs.", "error")
+        throw new Error("Error fetching server information")
       }
-
-      BeaconLogDebug(`${doPostPlayers.error}: ${doPostPlayers.message}`)
-      BeaconLogDebug(`${doServerInformation.error}: ${doServerInformation.message}`)
     } catch (error) {
       setErrorTimeout()
       BeaconLog("An unexpected error has occured. Please contact support if the problem persists.", "error")
